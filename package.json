@@ -2,7 +2,7 @@
   "name": "conf-uri-gen-utility",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://oxygenz6.github.io/conf-uri-gen-utility",
+  "homepage": "/conf-uri-gen-utility",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
