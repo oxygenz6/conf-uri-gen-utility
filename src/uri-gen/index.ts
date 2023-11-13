@@ -69,6 +69,20 @@ type VBasedOutbound = {
   streamSettings: StreamSettings;
   tag: string;
 };
+
+type OutboundProtocol =
+  | VBasedOutbound["protocol"]
+  | TrojanOutbound["protocol"]
+  | "freedom"
+  | "blackhole";
+
+type Outbound =
+  | {
+      protocol: OutboundProtocol;
+    }
+  | VBasedOutbound
+  | TrojanOutbound;
+
 const extractSharedParams = (
   o: Omit<TrojanOutbound | VBasedOutbound, "protocol">,
   hostAddress: string
@@ -175,8 +189,19 @@ export default function generateUris(rawData: string) {
     alert("Unable to parse configuration.");
     return [];
   }
-  const outbound: VBasedOutbound | TrojanOutbound = jsonConf.outbounds[0];
-  const protocol = outbound.protocol;
+  const outboundObjects: Array<Outbound> = jsonConf.outbounds;
 
-  return generators[protocol](outbound as never);
+  const outboundsURIs: string[] = [];
+  outboundObjects
+    .filter((obj) => !["freedom", "blackhole"].includes(obj.protocol))
+    .forEach((outbound) => {
+      const protocol = outbound.protocol;
+
+      const outboundURIs = generators[
+        protocol as any as (VBasedOutbound | TrojanOutbound)["protocol"]
+      ](outbound as never);
+      outboundsURIs.push(...outboundURIs);
+    });
+
+  return outboundsURIs;
 }

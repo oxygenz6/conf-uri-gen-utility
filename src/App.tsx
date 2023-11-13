@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import "./App.css";
-import ConfigInput from "./components/ConfigInput";
+import ConfigInput from "./components/organisms/ConfigInput";
+import ConfigOutput from "./components/organisms/ConfigOutput";
 import logo from "./logo.svg";
 import generateUris from "./uri-gen";
 
@@ -9,7 +10,7 @@ function App() {
 
   const generatedUris = useMemo(() => {
     if (rawData === "") {
-      return null;
+      return [];
     }
     return generateUris(rawData);
   }, [rawData]);
@@ -18,19 +19,7 @@ function App() {
     <main className="App">
       <img src={logo} className="App-logo" alt="logo" />
       <ConfigInput setRawData={setRawData} />
-
-      {generatedUris?.map((uri) => (
-        <code
-          style={{
-            display: "block",
-            overflowX: "auto",
-            whiteSpace: "nowrap",
-          }}
-          key={uri}
-        >
-          {uri}
-        </code>
-      ))}
+      <ConfigOutput outboundUrls={generatedUris} />
     </main>
   );
 }
