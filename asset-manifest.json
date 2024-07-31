@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/conf-uri-gen-utility/static/css/main.29b547c2.css",
-    "main.js": "/conf-uri-gen-utility/static/js/main.36c9189d.js",
+    "main.css": "/conf-uri-gen-utility/static/css/main.3c465cd6.css",
+    "main.js": "/conf-uri-gen-utility/static/js/main.5c7c2aaf.js",
     "static/js/55.7f8b90da.chunk.js": "/conf-uri-gen-utility/static/js/55.7f8b90da.chunk.js",
     "static/media/logo.svg": "/conf-uri-gen-utility/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/conf-uri-gen-utility/index.html",
-    "main.29b547c2.css.map": "/conf-uri-gen-utility/static/css/main.29b547c2.css.map",
-    "main.36c9189d.js.map": "/conf-uri-gen-utility/static/js/main.36c9189d.js.map",
+    "main.3c465cd6.css.map": "/conf-uri-gen-utility/static/css/main.3c465cd6.css.map",
+    "main.5c7c2aaf.js.map": "/conf-uri-gen-utility/static/js/main.5c7c2aaf.js.map",
     "55.7f8b90da.chunk.js.map": "/conf-uri-gen-utility/static/js/55.7f8b90da.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.29b547c2.css",
-    "static/js/main.36c9189d.js"
+    "static/css/main.3c465cd6.css",
+    "static/js/main.5c7c2aaf.js"
   ]
 }
