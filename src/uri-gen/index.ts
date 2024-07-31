@@ -14,13 +14,15 @@ type HttpSettings = {
   headers?: {
     Host?: string;
   };
-  path: string;
+  host?: string;
+  path?: string;
 };
 type WsSettings = {
   headers?: {
     Host?: string;
   };
-  path: string;
+  host?: string;
+  path?: string;
 };
 
 type RealitySettings = {
@@ -38,6 +40,8 @@ type StreamSettings = {
   tlsSettings?: TlsSettings;
   wsSettings?: WsSettings;
   httpSettings?: HttpSettings;
+  splithttpSettings?: HttpSettings;
+  httpupgradeSettings?: HttpSettings;
   realitySettings?: RealitySettings;
 };
 
@@ -83,27 +87,52 @@ type Outbound =
   | VBasedOutbound
   | TrojanOutbound;
 
+type SharedParams = {
+  type: TransportNetwork;
+  security: StreamSettings["security"];
+  fp?: TlsSettings["fingerprint"];
+  sni?: TlsSettings["serverName"];
+  alpn?: string;
+  host?: string;
+  path?: string;
+};
+
 const extractSharedParams = (
   o: Omit<TrojanOutbound | VBasedOutbound, "protocol">,
   hostAddress: string
-) => {
-  return {
+): SharedParams => {
+  const output: SharedParams = {
     type: o.streamSettings.network,
     security: o.streamSettings.security,
-    host:
-      o.streamSettings.wsSettings?.headers?.Host ||
-      o.streamSettings.httpSettings?.headers?.Host ||
-      o.streamSettings.tlsSettings?.serverName ||
-      hostAddress,
-    path:
-      o.streamSettings.wsSettings?.path || o.streamSettings.httpSettings?.path,
-
-    // TLS Settings
-    fp: o.streamSettings.tlsSettings?.fingerprint,
-    sni: o.streamSettings.tlsSettings?.serverName,
-    alpn: o.streamSettings.tlsSettings?.alpn?.join(","),
   };
+
+  if (o.streamSettings.security != "none") {
+    output["fp"] = o.streamSettings.tlsSettings?.fingerprint;
+    output["sni"] = o.streamSettings.tlsSettings?.serverName;
+    output["alpn"] = o.streamSettings.tlsSettings?.alpn?.join(",");
+  }
+
+  if (
+    ["ws", "http", "splithttp", "httpupgrade"].includes(
+      o.streamSettings.network
+    )
+  ) {
+    const networkSettings =
+      o.streamSettings.httpSettings ||
+      o.streamSettings.wsSettings ||
+      o.streamSettings.httpupgradeSettings ||
+      o.streamSettings.splithttpSettings;
+    output.path = networkSettings?.path;
+    output.host =
+      networkSettings?.host ||
+      networkSettings?.headers?.Host ||
+      o.streamSettings.tlsSettings?.serverName ||
+      hostAddress;
+  }
+
+  return output;
 };
+
 const trojanUriGenerator = ({ protocol, ...o }: TrojanOutbound) => {
   const { address: host, port, password } = o.settings.servers[0];
   const payload = JSON.parse(
