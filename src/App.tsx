@@ -1,11 +1,16 @@
 import { useMemo, useState } from "react";
 import "./App.css";
+import AppVersion from "./components/molecules/AppVersion";
 import ConfigInput from "./components/organisms/ConfigInput";
 import ConfigOutput from "./components/organisms/ConfigOutput";
 import logo from "./logo.svg";
 import generateUris from "./uri-gen";
 
-function App() {
+type Props = {
+  version: string;
+};
+
+function App({ version }: Props) {
   const [rawData, setRawData] = useState("");
 
   const generatedUris = useMemo(() => {
@@ -20,6 +25,7 @@ function App() {
       <img src={logo} className="App-logo" alt="logo" />
       <ConfigInput setRawData={setRawData} />
       <ConfigOutput outboundUrls={generatedUris} />
+      <AppVersion version={version} />
     </main>
   );
 }
