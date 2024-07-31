@@ -198,7 +198,7 @@ export default function generateUris(rawData: string) {
       const protocol = outbound.protocol;
 
       const outboundURIs = generators[
-        protocol as any as (VBasedOutbound | TrojanOutbound)["protocol"]
+        protocol as (VBasedOutbound | TrojanOutbound)["protocol"]
       ](outbound as never);
       outboundsURIs.push(...outboundURIs);
     });
